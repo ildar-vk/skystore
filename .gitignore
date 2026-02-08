@@ -1,43 +1,91 @@
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-
-# Virtual Environment
-.venv/
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
 # Django
-*.sqlite3
+*.log
+*.pot
+*.pyc
+__pycache__/
 db.sqlite3
-db.sqlite3-journal
-
-# Static files
-staticfiles/
 media/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # IDE
 .idea/
 .vscode/
-
-# OS
-.DS_Store
-Thumbs.db
 *.swp
 *.swo
 
-# Logs
-*.log
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-.gitignore*.sqlite3
-.env
-__pycache__/
-*.pyc
-media/
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
 .venv/
 venv/
+env/
+ENV/
+
+# Testing
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
