@@ -29,9 +29,11 @@
                         <i class="bi bi-grid"></i> Категории
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'home' %}">Все товары</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         {% for category in categories %}
                         <li>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{% url 'category_products' category.id %}">
                                 {{ category.name }}
                             </a>
                         </li>
