@@ -1,0 +1,41 @@
+[
+{
+  "model": "catalog.product",
+  "pk": 1,
+  "fields": {
+    "name": "Смартфон",
+    "description": "Современный смартфон с камерой 48 МП",
+    "image": "",
+    "category": 1,
+    "price": "27999.99",
+    "created_at": "2026-02-08T10:16:49.013Z",
+    "updated_at": "2026-02-08T10:17:15.881Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 2,
+  "fields": {
+    "name": "Ноутбук",
+    "description": "Игровой ноутбук с видеокартой RTX 4060",
+    "image": "",
+    "category": 1,
+    "price": "79999.99",
+    "created_at": "2026-02-08T10:16:49.015Z",
+    "updated_at": "2026-02-08T10:16:49.015Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 4,
+  "fields": {
+    "name": "Книга по Python",
+    "description": "Программирование на Python для начинающих",
+    "image": "",
+    "category": 2,
+    "price": "2499.99",
+    "created_at": "2026-02-08T10:16:49.019Z",
+    "updated_at": "2026-02-08T10:16:49.019Z"
+  }
+}
+]
