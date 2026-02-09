@@ -2,28 +2,20 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Наши товары</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+            <li class="breadcrumb-item active">{{ category.name }}</li>
+        </ol>
+    </nav>
     
-    <!-- Блок с категориями -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Категории товаров</h5>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a href="{% url 'home' %}" class="btn btn-outline-primary">
-                            Все товары
-                        </a>
-                        {% for category in categories %}
-                        <a href="{% url 'category_products' category.id %}" class="btn btn-outline-secondary">
-                            {{ category.name }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
+    <h1 class="mb-4">Товары категории: {{ category.name }}</h1>
+    
+    {% if category.description %}
+    <div class="alert alert-info">
+        {{ category.description }}
     </div>
+    {% endif %}
     
     {% if products %}
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -61,9 +53,15 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="alert alert-info">
-        Товары пока не добавлены. Зайдите позже!
+    <div class="alert alert-warning">
+        В этой категории пока нет товаров.
     </div>
     {% endif %}
+    
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Вернуться на главную
+        </a>
+    </div>
 </div>
 {% endblock %}
