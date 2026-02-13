@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Категории товаров - Skystore{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Категории товаров</h1>
+    
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-folder display-1 text-primary mb-3"></i>
+                    <h3 class="card-title h5">{{ category.name }}</h3>
+                    <p class="card-text text-muted">
+                        {{ category.description|default:"Нет описания"|truncatewords:15 }}
+                    </p>
+                    <p class="text-info">
+                        <i class="bi bi-box"></i> Товаров: {{ category.products.count }}
+                    </p>
+                    <a href="{% url 'catalog:product_list_by_category' category.id %}" 
+                       class="btn btn-primary">
+                        <i class="bi bi-eye"></i> Показать товары
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
+                <i class="bi bi-exclamation-triangle fs-4"></i>
+                <p class="mb-0">Категории не найдены</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

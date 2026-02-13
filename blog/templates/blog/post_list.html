@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Блог - Skystore{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-5">Блог</h1>
+            <p class="lead">Интересные статьи о мире технологий</p>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="col-auto">
+            <a href="{% url 'blog:post_create' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Создать статью
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row g-4">
+        {% for post in posts %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                {% if post.preview %}
+                <img src="{{ post.preview.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="bi bi-image fs-1"></i>
+                </div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text text-muted">{{ post.content|truncatewords:20 }}</p>
+                </div>
+
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar3"></i> {{ post.created_at|date:"d.m.Y" }}
+                        </small>
+                        <span class="badge bg-info">
+                            <i class="bi bi-eye"></i> {{ post.views_count }}
+                        </span>
+                    </div>
+
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-primary w-100">
+                        <i class="bi bi-book"></i> Читать
+                    </a>
+
+                    {% if user.is_authenticated %}
+                    <div class="mt-2 d-flex gap-2">
+                        <a href="{% url 'blog:post_update' post.slug %}" class="btn btn-sm btn-warning flex-grow-1">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'blog:post_delete' post.slug %}" class="btn btn-sm btn-danger flex-grow-1">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle fs-4"></i>
+                <p class="mb-0">Статей пока нет. Будьте первым!</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
