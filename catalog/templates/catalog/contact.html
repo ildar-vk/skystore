@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Контакты - Skystore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">Свяжитесь с нами</h1>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Контактная информация</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-geo-alt text-primary"></i>
+                                    <strong>Адрес:</strong> г. Москва, ул. Примерная, д. 123
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-telephone text-primary"></i>
+                                    <strong>Телефон:</strong> +7 (999) 123-45-67
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-envelope text-primary"></i>
+                                    <strong>Email:</strong> info@skystore.ru
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-clock text-primary"></i>
+                                    <strong>Режим работы:</strong> Пн-Пт 9:00-20:00
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Напишите нам</h5>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label class="form-label">Ваше имя</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Сообщение</label>
+                                    <textarea class="form-control" name="message" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send"></i> Отправить
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

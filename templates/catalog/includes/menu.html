@@ -1,65 +1,67 @@
+<!-- templates/catalog/includes/menu.html -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">
+        <a class="navbar-brand" href="{% url 'catalog:index' %}">
             <i class="bi bi-shop"></i> Skystore
         </a>
-        
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
-                       href="{% url 'home' %}">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+                       href="{% url 'catalog:index' %}">
                         <i class="bi bi-house"></i> Главная
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %}" 
-                       href="{% url 'contacts' %}">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}"
+                       href="{% url 'catalog:product_list' %}">
+                        <i class="bi bi-grid"></i> Каталог
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'category_list' %}active{% endif %}"
+                       href="{% url 'catalog:category_list' %}">
+                        <i class="bi bi-tags"></i> Категории
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.app_name == 'blog' %}active{% endif %}"
+                       href="{% url 'blog:post_list' %}">
+                        <i class="bi bi-journal-text"></i> Блог
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                       href="{% url 'catalog:contact' %}">
                         <i class="bi bi-telephone"></i> Контакты
                     </a>
                 </li>
-                
-                <!-- Выпадающее меню категорий -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-grid"></i> Категории
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'home' %}">Все товары</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        {% for category in categories %}
-                        <li>
-                            <a class="dropdown-item" href="{% url 'category_products' category.id %}">
-                                {{ category.name }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
             </ul>
-            
-            <!-- Поиск и корзина -->
-            <div class="d-flex align-items-center">
-                <form class="d-flex me-3" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Поиск товаров...">
-                    <button class="btn btn-outline-light" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
-                
-                <a href="#" class="btn btn-outline-light me-2">
-                    <i class="bi bi-cart"></i> Корзина
-                    <span class="badge bg-danger">3</span>
-                </a>
-                
-                <a href="/admin" class="btn btn-primary">
-                    <i class="bi bi-person-circle"></i> Админка
-                </a>
-            </div>
+
+            <!-- Поиск -->
+            <form class="d-flex me-3" role="search" method="get" action="{% url 'catalog:product_list' %}">
+                <input class="form-control me-2" type="search" name="q" placeholder="Поиск товаров..."
+                       value="{{ request.GET.q|default:'' }}">
+                <button class="btn btn-outline-light" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+
+            <!-- Админка/Вход -->
+            {% if user.is_authenticated %}
+            <a href="{% url 'admin:index' %}" class="btn btn-primary">
+                <i class="bi bi-person-circle"></i> Админка
+            </a>
+            {% else %}
+            <a href="{% url 'admin:login' %}" class="btn btn-primary">
+                <i class="bi bi-box-arrow-in-right"></i> Войти
+            </a>
+            {% endif %}
         </div>
     </div>
 </nav>
