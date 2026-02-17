@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">{{ title }}</h3>
+                </div>
+
+                <div class="card-body">
+                    <!-- Отображение сообщений -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Отображение ошибок формы -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>❌ Ошибка!</strong>
+                            <ul class="mb-0 mt-2">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ field|title }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                        <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
+
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted">
+                                        <small>{{ field.help_text }}</small>
+                                    </div>
+                                {% endif %}
+
+                                {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ field.errors|first }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                {% if object %}Сохранить изменения{% else %}Создать продукт{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {% if object %}
+                <div class="card-footer text-muted">
+                    <small>
+                        Создан: {{ object.created_at|date:"d.m.Y H:i" }}<br>
+                        Последнее обновление: {{ object.updated_at|date:"d.m.Y H:i" }}
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Подсказки по валидации -->
+            <div class="card mt-3 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">ℹ️ Правила заполнения формы</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Название продукта должно быть уникальным и содержать минимум 3 символа</li>
+                        <li>Запрещенные слова в названии и описании:
+                            <code>казино, криптовалюта, крипта, биржа, дешево, бесплатно, обман, полиция, радар</code>
+                        </li>
+                        <li>Цена должна быть положительным числом (от 0.01 до 1 000 000)</li>
+                        <li>Описание не обязательно, но рекомендуется для лучшей продажи</li>
+                        <li>Изображение должно быть в формате JPG, PNG или GIF</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control:focus, .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    .form-control.is-invalid, .form-select.is-invalid {
+        border-color: #dc3545;
+    }
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875em;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Активация tooltips Bootstrap
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
+    // Автоматическое скрытие сообщений через 5 секунд
+    setTimeout(function() {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            var bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+</script>
+{% endblock %}

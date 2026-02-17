@@ -1,11 +1,13 @@
+# catalog/views.py (полная версия)
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.contrib import messages
 from .models import Product, Category
+from .forms import ProductForm
 
 
-# Главная страница
+# 🔥 ДОБАВИТЬ: Главная страница
 class IndexView(TemplateView):
     template_name = 'catalog/index.html'
 
@@ -15,7 +17,7 @@ class IndexView(TemplateView):
         return context
 
 
-# Страница контактов
+# 🔥 ДОБАВИТЬ: Страница контактов
 class ContactView(TemplateView):
     template_name = 'catalog/contact.html'
 
@@ -24,16 +26,8 @@ class ContactView(TemplateView):
         context['title'] = 'Контакты'
         return context
 
-    def post(self, request, *args, **kwargs):
-        # Обработка формы контактов (если есть)
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
-        # Логика обработки формы...
-        return self.render_to_response(self.get_context_data(success=True))
 
-
-# Список продуктов
+# 🔥 ДОБАВИТЬ: Список продуктов
 class ProductListView(ListView):
     model = Product
     template_name = 'catalog/product_list.html'
@@ -53,54 +47,63 @@ class ProductListView(ListView):
         return context
 
 
-# Детальная информация о продукте
+# 🔥 ДОБАВИТЬ: Детальная информация о продукте
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
 
 
-# Создание продукта (только для авторизованных)
+# У вас уже есть:
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
+    form_class = ProductForm
     template_name = 'catalog/product_form.html'
-    fields = ['name', 'description', 'image', 'category', 'price']
-    success_url = reverse_lazy('catalog:product_list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Создание продукта'
-        return context
-
-
-# Редактирование продукта (только для авторизованных)
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
-    model = Product
-    template_name = 'catalog/product_form.html'
-    fields = ['name', 'description', 'image', 'category', 'price']
 
     def get_success_url(self):
+        messages.success(self.request, 'Продукт успешно создан!')
         return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = f'Редактирование: {self.object.name}'
-        return context
+    def form_valid(self, form):
+        messages.success(self.request, '✅ Продукт успешно создан!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '❌ Пожалуйста, исправьте ошибки в форме.')
+        return super().form_invalid(form)
 
 
-# Удаление продукта (только для авторизованных)
+# У вас уже есть:
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Продукт успешно обновлен!')
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        messages.success(self.request, '✅ Продукт успешно обновлен!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '❌ Пожалуйста, исправьте ошибки в форме.')
+        return super().form_invalid(form)
+
+
+# У вас уже есть:
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:product_list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = f'Удаление: {self.object.name}'
-        return context
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, '✅ Продукт успешно удален!')
+        return super().delete(request, *args, **kwargs)
 
 
-# Список категорий
+# 🔥 ДОБАВИТЬ: Список категорий
 class CategoryListView(ListView):
     model = Category
     template_name = 'catalog/category_list.html'
