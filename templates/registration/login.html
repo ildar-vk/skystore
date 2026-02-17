@@ -1,0 +1,85 @@
+<!-- templates/registration/login.html -->
+{% extends 'base.html' %}
+
+{% block title %}Вход в систему - Skystore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="bi bi-box-arrow-in-right"></i> Вход в систему
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    {% if form.errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Ошибка!</strong> Неправильное имя пользователя или пароль.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+
+                    {% if next %}
+                        {% if user.is_authenticated %}
+                            <div class="alert alert-warning">
+                                У вас нет доступа к этой странице. Пожалуйста, войдите с другой учетной записью.
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Имя пользователя:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" name="username" class="form-control" id="id_username"
+                                       placeholder="Введите имя пользователя" required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Пароль:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" name="password" class="form-control" id="id_password"
+                                       placeholder="Введите пароль" required>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-box-arrow-in-right"></i> Войти
+                            </button>
+                        </div>
+
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+
+                    <hr>
+
+                    <div class="text-center">
+                        <p class="text-muted mb-0">
+                            Тестовый пользователь: <code>admin / admin</code>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Демо-доступ:</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="bi bi-check-circle-fill text-success"></i> Администратор: admin / admin</li>
+                        <li><i class="bi bi-check-circle-fill text-success"></i> Пользователь: user / password123</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
