@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog',
     'blog',
+    'users',  # Приложение для работы с пользователями
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Добавили папку templates
+        'DIRS': [BASE_DIR / 'templates'],  # Общая папка с шаблонами
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,7 +139,52 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# ========== НАСТРОЙКИ АУТЕНТИФИКАЦИИ И ПОЛЬЗОВАТЕЛЕЙ ==========
+
+# Кастомная модель пользователя
+AUTH_USER_MODEL = 'users.User'
+
 # Настройки аутентификации
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'catalog:index'
-LOGOUT_REDIRECT_URL = 'catalog:index'
+LOGIN_URL = 'users:login'  # URL для входа (с указанием namespace)
+LOGIN_REDIRECT_URL = 'catalog:index'  # Куда перенаправлять после входа
+LOGOUT_REDIRECT_URL = 'catalog:index'  # Куда перенаправлять после выхода
+
+
+# ========== НАСТРОЙКИ ПОЧТЫ ==========
+
+# Email настройки для разработки (письма выводятся в консоль)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Для реальной отправки почты (раскомментировать в продакшене)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+# EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+# EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+# От кого письма
+DEFAULT_FROM_EMAIL = 'noreply@skystore.com'
+SERVER_EMAIL = 'noreply@skystore.com'
+
+
+if not DEBUG:
+    # Безопасность
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    # Дополнительные настройки безопасности
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+
+    # Trusted origins для CSRF
+    CSRF_TRUSTED_ORIGINS = [
+        'https://your-domain.com',
+        'https://www.your-domain.com',
+    ]
