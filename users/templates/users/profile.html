@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Профиль - Skystore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1>Профиль пользователя</h1>
+    <p>Email: {{ user.email }}</p>
+    {% if user.first_name %}<p>Имя: {{ user.first_name }}</p>{% endif %}
+    {% if user.last_name %}<p>Фамилия: {{ user.last_name }}</p>{% endif %}
+    {% if user.phone_number %}<p>Телефон: {{ user.phone_number }}</p>{% endif %}
+    {% if user.country %}<p>Страна: {{ user.country }}</p>{% endif %}
+</div>
+{% endblock %}

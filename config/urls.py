@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include('catalog.urls')),
     path('blog/', include('blog.urls')),
     path('debug/', debug_catalog, name='debug'),
+    path('users/', include('users.urls')),
 
     # Добавляем URLs для аутентификации
     path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
