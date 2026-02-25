@@ -44,9 +44,23 @@ class UserRegistrationView(CreateView):
         """
         Действия при невалидной форме
         """
+        print("=" * 50)
+        print("FORM INVALID - ОШИБКИ РЕГИСТРАЦИИ:")
+        print("Email:", form.data.get('email', 'не указан'))
+        print("Ошибки:")
+        for field, errors in form.errors.items():
+            print(f"  {field}: {errors}")
+        print("=" * 50)
+
+        error_messages = []
+        for field, errors in form.errors.items():
+            field_name = dict(form.fields)[field].label if field in form.fields else field
+            for error in errors:
+                error_messages.append(f"{field_name}: {error}")
+
         messages.error(
             self.request,
-            '❌ Ошибка регистрации. Проверьте правильность заполнения полей.'
+            '❌ Ошибка регистрации:\n' + '\n'.join(error_messages)
         )
         return super().form_invalid(form)
 
