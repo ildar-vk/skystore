@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Category(models.Model):
@@ -42,8 +45,7 @@ class Product(models.Model):
         on_delete=models.SET_NULL,
         verbose_name='Категория',
         blank=True,
-        null=True,
-        related_name='products'
+        null=True
     )
     price = models.DecimalField(
         max_digits=10,
@@ -59,10 +61,33 @@ class Product(models.Model):
         verbose_name='Дата последнего изменения'
     )
 
+    # НОВОЕ: Владелец продукта
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Владелец',
+        related_name='products',
+        null=True,
+        blank=True
+    )
+
+    # НОВОЕ: Статус публикации
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name='Опубликовано',
+        help_text='Опубликован ли продукт'
+    )
+
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
         ordering = ['-created_at']
+
+        # НОВЫЕ: Кастомные права
+        permissions = [
+            ('can_unpublish_product', 'Может отменять публикацию продукта'),
+            ('can_delete_any_product', 'Может удалять любой продукт'),
+        ]
 
     def __str__(self):
         return f"{self.name} - {self.price}"
