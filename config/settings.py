@@ -188,3 +188,33 @@ if not DEBUG:
         'https://your-domain.com',
         'https://www.your-domain.com',
     ]
+# ========== НАСТРОЙКИ КЕШИРОВАНИЯ ==========
+# Включаем кеширование (можно управлять через .env)
+CACHE_ENABLED = os.getenv('CACHE_ENABLED', 'True') == 'True'
+
+if CACHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+                #'PARSER_CLASS': 'redis.connection.HiredisParser',
+                'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+                'CONNECTION_POOL_CLASS_KWARGS': {
+                    'max_connections': 50,
+                    'timeout': 20,
+                },
+                'MAX_CONNECTIONS': 1000,
+                'PICKLE_VERSION': -1,
+            },
+            'KEY_PREFIX': 'skystore',
+            'TIMEOUT': 60 * 15,  # 15 минут по умолчанию
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
